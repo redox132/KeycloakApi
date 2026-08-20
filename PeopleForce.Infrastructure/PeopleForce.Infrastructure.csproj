@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PeopleForce.Application\PeopleForce.Application.csproj" />
+      <ProjectReference Include="..\PeopleForce.Domain\PeopleForce.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="PeopleForceDataContext\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.11" />
+      <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="11.0.0-preview.7.26381.103" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="11.0.0-preview.7.26381.103" />
+    </ItemGroup>
+
+</Project>

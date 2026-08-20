@@ -1,0 +1,7 @@
+﻿services:
+  peopleforce:
+    image: peopleforce
+    build:
+      context: .
+      dockerfile: PeopleForce/Dockerfile
+
