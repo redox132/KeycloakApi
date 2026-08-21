@@ -6,21 +6,14 @@ namespace PeopleForce.Infrastructure.Users.Commands.Authentication;
 
 public class AuthenticationRepo : IAuthenticationRepo
 {
-    private readonly IAuthenticationService  _authenticationService;
+    private readonly IAuthenticationRepo  _authenticationRepo;
 
-    public AuthenticationRepo(IAuthenticationService authenticationService)
+    public AuthenticationRepo(IAuthenticationRepo authenticationRepo)
     {
-        _authenticationService = authenticationService;
+        _authenticationRepo = authenticationRepo;
     }
     public async Task<KeycloakAuthResponse> Authenticate(AuthenticationRequest request)
     {
-        
-        
-        KeycloakAuthResponse response = new KeycloakAuthResponse
-        {
-            
-        };
-        
-        return _authenticationService.AuthenticateAsync(request);
+        return await _authenticationRepo.Authenticate(request);
     }
 }

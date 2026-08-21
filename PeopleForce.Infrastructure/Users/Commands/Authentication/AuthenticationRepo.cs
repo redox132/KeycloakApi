@@ -13,10 +13,10 @@ public class AuthenticationRepo : IAuthenticationRepo
 
     public AuthenticationRepo(
         HttpClient httpClient,
-        IOptions<KeycloakConfig> keyclockConfig)
+        IOptions<KeycloakConfig> keycloakConfig)
     {
         _httpClient = httpClient;
-        _keyclockConfig = _keyclockConfig.Value;
+        _keyclockConfig = keycloakConfig.Value;
     }
 
     public async Task<KeycloakAuthResponse> Authenticate(AuthenticationRequest request)

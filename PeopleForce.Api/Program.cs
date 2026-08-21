@@ -1,4 +1,6 @@
 using Microsoft.OpenApi;
+using PeopleForce.Api.Expections;
+using PeopleForce.Api.ValidatorServices;
 using PeopleForce.Application;
 using PeopleForce.Infrastructure;
 using Scalar.AspNetCore;
@@ -44,9 +46,12 @@ builder.Services.AddOpenApi(options =>
     });
 });
 
+builder.Services.AddExceptionHandler<GlobalExceptionsHanlder>();
 builder.Services.AddHttpClient();
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddValidatorServices();
+
 
 var app = builder.Build();
 
@@ -56,6 +61,8 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
+
+app.UseExceptionHandler( _ => { });
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

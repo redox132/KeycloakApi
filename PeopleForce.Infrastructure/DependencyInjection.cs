@@ -28,7 +28,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddKeycloakConfiguration(this IServiceCollection services, IConfiguration  configuration)
     {
-        services.Configure<KeyclockConfig>(
+        services.Configure<KeycloakConfig>(
             configuration.GetSection("Config:Keycloak"));
         
         return services;
