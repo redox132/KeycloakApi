@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
-using PeopleForce.Application.Users.Authentication;
+using PeopleForce.Application.Interfaces.Users.Commands.Authentication;
 using PeopleForce.Infrastructure.Config.Keyclock;
 
 namespace PeopleForce.Infrastructure.Users.Commands.Authentication;
@@ -9,14 +9,14 @@ namespace PeopleForce.Infrastructure.Users.Commands.Authentication;
 public class AuthenticationRepo : IAuthenticationRepo
 {
     private readonly HttpClient _httpClient;
-    private readonly KeyclockConfig _keyclockConfig;
+    private readonly KeycloakConfig _keyclockConfig;
 
     public AuthenticationRepo(
         HttpClient httpClient,
-        IOptions<KeyclockConfig> keyclockConfig)
+        IOptions<KeycloakConfig> keyclockConfig)
     {
         _httpClient = httpClient;
-        _keyclockConfig = keyclockConfig.Value;
+        _keyclockConfig = _keyclockConfig.Value;
     }
 
     public async Task<KeycloakAuthResponse> Authenticate(AuthenticationRequest request)

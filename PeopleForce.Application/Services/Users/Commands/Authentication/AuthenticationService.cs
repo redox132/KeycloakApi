@@ -1,6 +1,6 @@
-using PeopleForce.Application.Users.Authentication;
+using PeopleForce.Application.Interfaces.Users.Commands.Authentication;
 
-namespace PeopleForce.Application.Services.Authentication;
+namespace PeopleForce.Application.Services.Users.Commands.Authentication;
 
 public class AuthenticationService : IAuthenticationService
 {
@@ -11,7 +11,9 @@ public class AuthenticationService : IAuthenticationService
         _authenticationRepo = authenticationRepo;
     }
     
-    public async Task<AuthenticationResult> Authenticate(AuthenticationRequest request)
+    public async Task<AuthenticationResult> AuthenticateAsync(
+        AuthenticationRequest request,
+        CancellationToken cancellationToken)
     {
         var res = await _authenticationRepo.Authenticate(request);
 

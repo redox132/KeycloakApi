@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace PeopleForce.Application.Users.Authentication;
+namespace PeopleForce.Application.Interfaces.Users.Commands.Authentication;
 
 public class KeycloakAuthResponse
 {

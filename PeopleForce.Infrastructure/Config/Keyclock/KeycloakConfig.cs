@@ -1,6 +1,6 @@
 namespace PeopleForce.Infrastructure.Config.Keyclock;
 
-public class KeyclockConfig
+public class KeycloakConfig
 {
     public required string BaseUrl  { get; set; }
     public required string Client { get; set; }

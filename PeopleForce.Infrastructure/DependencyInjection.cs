@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PeopleForce.Application.Users.Authentication;
 using PeopleForce.Application.Users.Queries.GetUserById.Repository;
 using PeopleForce.Infrastructure.Config.Keyclock;
 using PeopleForce.Infrastructure.Users.Commands.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PeopleForce.Application.Interfaces.Users.Commands.Authentication;
+using PeopleForce.Infrastructure.PeopleForceAppDbContext;
 using PeopleForce.Infrastructure.Users.Queries;
 
 namespace PeopleForce.Infrastructure;
@@ -17,8 +19,9 @@ public static class DependencyInjection
     {
         AddKeycloakConfiguration(services, configuration);
         AddJwtOptions(services, configuration);
+        AddPostgresServices(services, configuration);
         
-        services.AddScoped<IGetUserByIdRepository, GetUserByIdRepository>();
+        services.AddScoped<IGetUserById, GetUserById>();
         services.AddScoped<IAuthenticationRepo, AuthenticationRepo>();
         return services;
     }
@@ -31,28 +34,30 @@ public static class DependencyInjection
         return services;
     }
 
+    private static IServiceCollection AddPostgresServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(configuration.GetConnectionString("Postgres")));
+                
+        return services;
+    }
+
     private static IServiceCollection AddJwtOptions( this IServiceCollection services, IConfiguration configuration)
     {
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority =
-                    configuration["Config:Keycloak:Authority"];
-
+                options.Authority =  configuration["Config:Keycloak:Authority"];
+                
                 options.RequireHttpsMetadata = false;
-
+                
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-
-                    ValidIssuer =
-                        configuration["Config:Keycloak:Authority"],
-
+                    ValidIssuer = configuration["Config:Keycloak:Authority"],
                     ValidateLifetime = true,
-
                     ValidateIssuerSigningKey = true,
-
                     ValidateAudience = false
                 };
 

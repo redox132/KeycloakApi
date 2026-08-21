@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PeopleForce.Application.Users.Queries.GetUserById.Service;
+using PeopleForce.Application.Interfaces.Users.Queries.GetUserById.Service;
 
 namespace PeopleForce.Api.Controllers.Users.Queries;
 
@@ -8,18 +8,18 @@ namespace PeopleForce.Api.Controllers.Users.Queries;
 [Route("api/users")]
 public class GetUserByIdController : ControllerBase
 {
-    private readonly IGetUserByIdService _getUserByIdService;
+    private readonly IGetUserById _getUserById;
 
-    public GetUserByIdController(IGetUserByIdService getUserByIdService)
+    public GetUserByIdController(IGetUserById getUserById)
     {
-        _getUserByIdService = getUserByIdService;
+        _getUserById = getUserById;
     }
 
     [Authorize]
     [HttpGet("{id}")]
-    public IActionResult GetUserById(int id)
+    public IActionResult GetUserById(Guid id)
     {
-        var response = _getUserByIdService.GetUserById(id);
+        var response = _getUserById.GetUserByIdAsync(id);
         return Ok(response);
     }
 }

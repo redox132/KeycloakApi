@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PeopleForce.Application.Users.Authentication;
+using PeopleForce.Application.Interfaces.Users.Commands.Authentication;
+
 
 namespace PeopleForce.Api.Controllers.Users.Commands.Authentication;
 
@@ -8,20 +9,16 @@ namespace PeopleForce.Api.Controllers.Users.Commands.Authentication;
 public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService;
-
     public AuthenticationController(IAuthenticationService  authenticationService)
     {
         _authenticationService = authenticationService;
     }
     
-    [HttpPost("token")]
-    public async Task<IActionResult> Authenticate(AuthenticationHtppRequest  request)
+    [HttpPost("token")] 
+    private async Task<IActionResult> AuthenticateAsync(AuthenticationHtppRequest request, CancellationToken  cancellationToken)
     {
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest
-        {
-            Code = request.Code,
-        };
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest { Code = request.Code };
         
-        return Ok(await _authenticationService.Authenticate(authenticationRequest));
+        return Ok(await _authenticationService.AuthenticateAsync(authenticationRequest, cancellationToken));
     }
 }
