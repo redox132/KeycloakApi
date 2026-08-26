@@ -1,14 +1,20 @@
+using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using PeopleForce.Application.Users.Queries.GetUserById.Repository;
-using PeopleForce.Infrastructure.Config.Keyclock;
-using PeopleForce.Infrastructure.Users.Commands.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using PeopleForce.Application.Interfaces.Users.Commands.Authentication;
+using PeopleForce.Application.Interfaces.Users.Commands.CreateUser.CreateUserRepo;
+using PeopleForce.Application.Interfaces.Users.Queries.DeleteUserById.Respository;
+using PeopleForce.Application.Interfaces.Users.Queries.GetUserById.Repository;
+using PeopleForce.Application.Interfaces.Users.Queries.GetUsers.Repository;
+using PeopleForce.Infrastructure.Keycloak;
 using PeopleForce.Infrastructure.PeopleForceAppDbContext;
+using PeopleForce.Infrastructure.Users.Commands.Authentication;
+using PeopleForce.Infrastructure.Users.Commands.CreateUser;
 using PeopleForce.Infrastructure.Users.Queries;
 
 namespace PeopleForce.Infrastructure;
@@ -21,8 +27,14 @@ public static class DependencyInjection
         AddJwtOptions(services, configuration);
         AddPostgresServices(services, configuration);
         
-        services.AddScoped<IGetUserById, GetUserById>();
+        services.AddScoped<IGetUserByIdRepo, GetUserByIdRepo>();
         services.AddScoped<IAuthenticationRepo, AuthenticationRepo>();
+        services.AddScoped<ICreateUserHandlerRepo, CreateUserHandlerRepo>();
+        services.AddScoped<IDeleteUserByIdRepo, DeleteUserByIdRepo>();
+        services.AddScoped<IGetUserByIdRepo, GetUserByIdRepo>();
+        services.AddScoped<IGetUsersRepo,  GetUsersRepo>();
+        services.AddScoped<IKeycloakClient, KeycloakClient>();
+        
         return services;
     }
 
@@ -36,7 +48,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddPostgresServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<AppDbContext>(options =>
+        services.AddDbContext<PeopleAppDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("Postgres")));
                 
         return services;

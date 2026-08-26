@@ -1,8 +1,7 @@
-using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using PeopleForce.Application.Interfaces.Users.Commands.Authentication;
-using PeopleForce.Infrastructure.Config.Keyclock;
+using PeopleForce.Infrastructure.Keycloak;
 
 namespace PeopleForce.Infrastructure.Users.Commands.Authentication;
 
@@ -29,7 +28,8 @@ public class AuthenticationRepo : IAuthenticationRepo
             ["client_id"] = _keyclockConfig.Client,
             ["grant_type"] = _keyclockConfig.GrantTYpe ?? "authorization_code",
             ["code"] = request.Code,
-            ["redirect_uri"] = _keyclockConfig.RedirectUri ?? "http://localhost:8000"
+            ["redirect_uri"] = _keyclockConfig.RedirectUri ?? "http://localhost:8082",
+            ["client_secret"] = _keyclockConfig.ClientSecret,
         });
 
         var response = await _httpClient.PostAsync(tokenUrl, form);

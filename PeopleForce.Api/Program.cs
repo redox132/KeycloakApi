@@ -1,6 +1,7 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.OpenApi;
 using PeopleForce.Api.Expections;
-using PeopleForce.Api.ValidatorServices;
 using PeopleForce.Application;
 using PeopleForce.Infrastructure;
 using Scalar.AspNetCore;
@@ -8,6 +9,12 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddFluentValidationAutoValidation();
+
+builder.Services.AddValidatorsFromAssembly(
+    typeof(Program).Assembly
+);
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddOpenApi(options =>
@@ -50,16 +57,14 @@ builder.Services.AddExceptionHandler<GlobalExceptionsHanlder>();
 builder.Services.AddHttpClient();
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddValidatorServices();
-
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
+// if (app.Environment.IsDevelopment())
+
     app.MapOpenApi();
     app.MapScalarApiReference();
-}
+
 
 
 app.UseExceptionHandler( _ => { });
